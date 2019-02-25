@@ -1,0 +1,41 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Libraries
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Qt
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+Makefile
+*build*
+ui_*.h
+*.qm
+connect
+main.ts
+
+# Linux/Unixes
+.*
+!.tx
+!.gitignore
+*~
