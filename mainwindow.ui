@@ -27,6 +27,19 @@
      <string>Connect to Display</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButtonplatformNativeInterface">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>80</y>
+      <width>211</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>platformNativeInterface</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

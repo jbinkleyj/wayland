@@ -4,6 +4,7 @@
 #include "/usr/include/wayland/wayland-client.h"
 
 #include <QDebug>
+#include <qpa/qplatformnativeinterface.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->setupUi(this);
 
     connect( ui->pushButtonConnectToDisplay, SIGNAL( clicked( bool ) ), this, SLOT( slot_pushButtonConnectToDisplay() ) );
+    connect( ui->pushButtonplatformNativeInterface, SIGNAL( clicked( bool ) ), this, SLOT( slot_platformNativeInterface() ) );
 }
 
 
@@ -23,30 +25,23 @@ MainWindow::~MainWindow()
 }
 
 
-/* https://www.jan.newmarch.name/Wayland/Qt/#aftertoc
+void MainWindow::slot_platformNativeInterface()
+{
+    // https://www.jan.newmarch.name/Wayland/Qt/#aftertoc
 
-    QPlatformNativeInterface *native =
-        QGuiApplication::platformNativeInterface();
-    struct wl_display *wl_dpy = (struct wl_display *)
-        native->nativeResourceForWindow("display", NULL);
-	
-      
+    QPlatformNativeInterface *native = QGuiApplication::platformNativeInterface();
+    struct wl_display *wl_dpy = (struct wl_display *)native->nativeResourceForWindow("display", NULL);
 
-If you need to get the Wayland surface, this is done by
-
-	
-    QPlatformNativeInterface *native =
-        QGuiApplication::platformNativeInterface();
-    struct wl_surface *surface = static_cast<struct wl_surface *>(
-       native->nativeResourceForWindow("surface", this->windowHandle()
-*/       
+    //If you need to get the Wayland surface, this is done by
+    QPlatformNativeInterface *native_1 = QGuiApplication::platformNativeInterface();
+    struct wl_surface *surface = static_cast<struct wl_surface *>(native_1->nativeResourceForWindow("surface", this->windowHandle() ));
+}
 
 
 void MainWindow::slot_pushButtonConnectToDisplay()
 {
-    
-    vk_display = wl_display_connect( NULL );
-    if ( vk_display == NULL )
+    vk_display = wl_display_connect( Q_NULLPTR );
+    if ( vk_display == Q_NULLPTR )
     {
         qDebug() << "Can't connect to display\n";
         return;
@@ -55,5 +50,4 @@ void MainWindow::slot_pushButtonConnectToDisplay()
 
     wl_display_disconnect( vk_display );
     qDebug() << "disconnected from display";
-
 }

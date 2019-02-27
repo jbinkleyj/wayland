@@ -6,6 +6,7 @@
 
 QT += core gui
 QT += dbus
+QT += gui-private
 
 CONFIG += c++11
 
