@@ -2,17 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDBusConnection>
-#include <QDBusConnectionInterface>
-#include <QDBusInterface>
 
 #include "/usr/include/wayland/wayland-client.h"
 
 namespace Ui {
 class MainWindow;
 }
-
-//struct wl_display *vk_display = NULL;
 
 class MainWindow : public QMainWindow
 {

@@ -1,15 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "/usr/include/wayland/wayland-client.h"
+
 #include <QDebug>
-#include <QDesktopWidget>
-#include <QGuiApplication>
-#include <QFile>
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// cc -o connect connect.c -lwayland-client
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
                                           ui(new Ui::MainWindow)
@@ -48,15 +45,15 @@ If you need to get the Wayland surface, this is done by
 void MainWindow::slot_pushButtonConnectToDisplay()
 {
     
-    vk_display = wl_display_connect(NULL);
-    if (vk_display == NULL)
+    vk_display = wl_display_connect( NULL );
+    if ( vk_display == NULL )
     {
-        fprintf(stderr, "Can't connect to display\n");
+        qDebug() << "Can't connect to display\n";
         return;
     }
-    printf("connected to display\n");
+    qDebug() << "connect to display";
 
-    wl_display_disconnect(vk_display);
-    printf("disconnected from display\n");
+    wl_display_disconnect( vk_display );
+    qDebug() << "disconnected from display";
 
 }
