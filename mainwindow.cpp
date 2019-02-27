@@ -27,14 +27,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::slot_platformNativeInterface()
 {
-    // https://www.jan.newmarch.name/Wayland/Qt/#aftertoc
-
+    // https://jan.newmarch.name/Wayland/ProgrammingClient/
     QPlatformNativeInterface *native = QGuiApplication::platformNativeInterface();
     struct wl_display *wl_dpy = (struct wl_display *)native->nativeResourceForWindow("display", NULL);
 
     //If you need to get the Wayland surface, this is done by
-    QPlatformNativeInterface *native_1 = QGuiApplication::platformNativeInterface();
-    struct wl_surface *surface = static_cast<struct wl_surface *>(native_1->nativeResourceForWindow("surface", this->windowHandle() ));
+    struct wl_surface *surface = static_cast<struct wl_surface *>(native->nativeResourceForWindow("surface", this->windowHandle() ));
 }
 
 
