@@ -37,6 +37,11 @@ Webcam:
 3. systemctl --user status pipewire.service --> Status von pipewire anzeigen
 4. gst-launch-1.0 pipewiresrc path=5 ! videoconvert ! ximagesink --> webcam starten
 
+Umgebungsvariablen:
+echo $XDG_SESSION_TYPE --> output: wayland
+echo $WAYLAND_DISPLAY  --> output: wayland-0
+echo $DESKTOP_SESSION  --> output: /usr/share/wayland-sessions/plasmawayland
+
 Erkenntnis:
 Mit pipewiresrc kann man ein und die selbe Webcam mehrmals am Bildschirm anzeigen.
 
