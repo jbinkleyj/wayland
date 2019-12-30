@@ -11,8 +11,11 @@ Es wird benötigt:
 
 
 Entwicklungsumgebung:
---opensuse 15.1      : Pipewire 2.2
---opensuse Tumbelweed: Pipewire 2.7
+--opensuse 15.1      : Pipewire 2.2 Plasma 5.12.8
+--opensuse Tumbelweed: Pipewire 2.7 Plasma 5.17.4 Stand 30.12.2019
+https://www.linux-community.de/ausgaben/linuxuser/2018/05/unter-einem-hut/2/
+Laut dieser Seite vorletzter Absatz ist das aufzeichnen von Bildschirminhalten erst ab Plasma 5.13 möglich.
+Entwicklen müßte man dann unter Tumbelweed.
 
 
 Wie Anfangen?
