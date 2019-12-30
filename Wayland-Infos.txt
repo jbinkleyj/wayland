@@ -11,6 +11,10 @@ https://www.linux-community.de/ausgaben/linuxuser/2018/05/unter-einem-hut/2/
 Laut dieser Seite vorletzter Absatz ist das aufzeichnen von Bildschirminhalten erst ab Plasma 5.13 möglich.
 Entwicklen müßte man dann unter Tumbelweed.
 
+https://www.collabora.com/news-and-blog/blog/2019/12/09/new-graphing-tool-pipewire-debugging/
+Laut dieser Seite gibt ein Grafisches Tool für PipeWire debugging.
+
+
 Wie Anfangen?
 http://jgrulich.cz/2018/03/06/screen-sharing-in-plasma-wayland-session/
 http://jgrulich.cz/category/kde/
