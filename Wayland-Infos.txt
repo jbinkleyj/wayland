@@ -27,6 +27,9 @@ xgd-portal-test --> Dateien downloaden, testen und lernen.
 https://cgit.kde.org/xdg-portal-test-kde.git/tree/src
 
 
+In Erfahrung bringen inwieweit Pipewire Daten im Userspace ablegt.
+
+
 
 GStreamer und pipewiresrc
 =========================
@@ -50,4 +53,4 @@ Erkenntnis:
 Mit pipewiresrc kann man ein und die selbe Webcam mehrmals am Bildschirm anzeigen.
 
 Frage:
-Wie ermittle ich den Wert von path?
+Wie ermittlet man den Wert von path?
