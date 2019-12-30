@@ -11,7 +11,8 @@ Es wird benötigt:
 
 
 Entwicklungsumgebung:
---opensuse Tumbelweed, Leap scheidet aus da zu alt.
+--opensuse 15.1      : Pipewire 2.2
+--opensuse Tumbelweed: Pipewire 2.7
 
 
 Wie Anfangen?
