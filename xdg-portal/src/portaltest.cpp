@@ -226,9 +226,13 @@ qDebug() << message;
         //QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id) << reply.value().fileDescriptor() << stream.node_id;
         //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id);
         //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert ! x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc tune=zerolatency qp-min=17 qp-max=17 speed-preset=superfast threads=1 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc key-int-max=25 qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
 
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc tune=zerolatency qp-min=17 qp-max=17 speed-preset=superfast threads=1 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-qDebug() << gstLaunch;
+        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc key-int-max=10 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+qDebug();
+        qDebug() << gstLaunch;
+qDebug();
         GstElement *element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
         gst_element_set_state(element, GST_STATE_PLAYING);
     }
