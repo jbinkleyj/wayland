@@ -184,7 +184,8 @@ void PortalTest::gotSelectSourcesResponse(uint response, const QVariantMap &resu
 
     QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher)
+    {
         QDBusPendingReply<QDBusObjectPath> reply = *watcher;
         if (reply.isError()) {
             qWarning() << "Couldn't get reply";
@@ -207,22 +208,27 @@ void PortalTest::gotStartResponse(uint response, const QVariantMap &results)
     }
 
     Streams streams = qdbus_cast<Streams>(results.value(QLatin1String("streams")));
-    Q_FOREACH (Stream stream, streams) {
+    Q_FOREACH (Stream stream, streams)
+    {
         QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                                               QLatin1String("/org/freedesktop/portal/desktop"),
                                                               QLatin1String("org.freedesktop.portal.ScreenCast"),
                                                               QLatin1String("OpenPipeWireRemote"));
 
         message << QVariant::fromValue(QDBusObjectPath(m_session)) << QVariantMap();
-
+qDebug() << message;
         QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
         pendingCall.waitForFinished();
         QDBusPendingReply<QDBusUnixFileDescriptor> reply = pendingCall.reply();
         if (reply.isError()) {
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
-qDebug() << QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id) << reply.value().fileDescriptor() << stream.node_id;
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        //QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id) << reply.value().fileDescriptor() << stream.node_id;
+        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert ! x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+
+        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc tune=zerolatency qp-min=17 qp-max=17 speed-preset=superfast threads=1 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+qDebug() << gstLaunch;
         GstElement *element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
         gst_element_set_state(element, GST_STATE_PLAYING);
     }
