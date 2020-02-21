@@ -26,6 +26,8 @@
 #include <QLoggingCategory>
 #include <QMainWindow>
 
+#include <gst/gst.h>
+
 namespace Ui
 {
 class PortalTest;
@@ -52,8 +54,12 @@ public Q_SLOTS:
     void gotStartResponse(uint response, const QVariantMap &results);
     void requestDeviceAccess();
     void requestScreenSharing();
+    void slot_Stop();
+
 
 private:
+    GstElement *pipeline = nullptr;
+
     QString getSessionToken();
     QString getRequestToken();
 
