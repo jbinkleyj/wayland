@@ -225,30 +225,33 @@ qDebug() << message;
         if (reply.isError()) {
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
-        //QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id) << reply.value().fileDescriptor() << stream.node_id;
-        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 ! videoconvert ! xvimagesink").arg(reply.value().fileDescriptor()).arg(stream.node_id);
-        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert ! x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc tune=zerolatency qp-min=17 qp-max=17 speed-preset=superfast threads=1 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-        //QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc key-int-max=25 qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux name=mux writing-app=vokoscreenNG_3.0.2 ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
 
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! videoconvert ! x264enc key-int-max=10 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=file-2.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+
 qDebug();
         qDebug() << gstLaunch;
 qDebug();
-        pipeline = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
-        gst_element_set_state( pipeline, GST_STATE_PLAYING);
+        element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
+        gst_element_set_state( element, GST_STATE_PLAYING);
     }
 }
 
 void PortalTest::slot_Stop()
 {
     GstStateChangeReturn ret ;
-    ret = gst_element_set_state( pipeline, GST_STATE_PAUSED );
-    ret = gst_element_set_state( pipeline, GST_STATE_READY );
-    ret = gst_element_set_state( pipeline, GST_STATE_NULL );
-    gst_object_unref( pipeline );
+    ret = gst_element_set_state( element, GST_STATE_PAUSED );
+    ret = gst_element_set_state( element, GST_STATE_READY );
+    ret = gst_element_set_state( element, GST_STATE_NULL );
+    gst_object_unref( element );
     qDebug().noquote() << "Stop record";
+    make_time_true();
+}
 
+void PortalTest::make_time_true()
+{
+    QString gstLaunch = QString( "filesrc location=vokoscreenNG.mkv ! matroskademux name=d d.video_0 ! matroskamux ! filesink location=voko-1.mkv" );
+    element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
+    gst_element_set_state( element, GST_STATE_PLAYING);
 }
 
 
