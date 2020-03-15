@@ -226,7 +226,7 @@ qDebug() << message;
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
 
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=superfast threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
 
 qDebug();
         qDebug() << gstLaunch;
