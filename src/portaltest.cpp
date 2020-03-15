@@ -26,6 +26,8 @@
 #include <QDBusConnectionInterface>
 #include <QDBusUnixFileDescriptor>
 #include <QWindow>
+#include <QStringList>
+#include <QStandardPaths>
 
 #include <gst/gst.h>
 
@@ -197,13 +199,20 @@ qDebug() << message;
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
 
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=/home/vk/Videos/vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-
+        QStringList gstLaunch;
+        gstLaunch << QString( "pipewiresrc fd=%1 path=%2 do-timestamp=true" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        gstLaunch << "queue";
+        gstLaunch << "videoconvert n-threads=4";
+        gstLaunch << "x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4";
+        gstLaunch << "video/x-h264, profile=baseline";
+        gstLaunch << "matroskamux";
+        gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
+        QString launch = gstLaunch.join( " ! " );
 qDebug();
-        qDebug() << gstLaunch;
+qDebug() << launch;
 qDebug();
-        element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
-        gst_element_set_state( element, GST_STATE_PLAYING);
+        element = gst_parse_launch( launch.toUtf8(), nullptr );
+        gst_element_set_state( element, GST_STATE_PLAYING );
     }
 }
 
@@ -220,8 +229,14 @@ void PortalTest::slot_Stop()
 
 void PortalTest::make_time_true()
 {
-    QString gstLaunch = QString( "filesrc location=/home/vk/Videos/vokoscreenNG.mkv ! matroskademux name=d d.video_0 ! matroskamux ! filesink location=/home/vk/Videos/voko-1.mkv" );
-    element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
+    QStringList gstLaunch;
+    gstLaunch << "filesrc location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
+    gstLaunch << "matroskademux name=d d.video_0";
+    gstLaunch << "matroskamux";
+    gstLaunch << "filesink location=" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-good.mkv";
+    QString launch = gstLaunch.join( " ! " );
+qDebug() << launch;
+    element = gst_parse_launch(launch.toUtf8(), nullptr);
     gst_element_set_state( element, GST_STATE_PLAYING);
 }
 
