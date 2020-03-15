@@ -52,7 +52,6 @@ public Q_SLOTS:
     void gotCreateSessionResponse(uint response, const QVariantMap &results);
     void gotSelectSourcesResponse(uint response, const QVariantMap &results);
     void gotStartResponse(uint response, const QVariantMap &results);
-    void requestDeviceAccess();
     void requestScreenSharing();
     void slot_Stop();
 

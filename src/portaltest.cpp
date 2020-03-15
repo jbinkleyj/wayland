@@ -64,9 +64,7 @@ PortalTest::PortalTest(QWidget *parent, Qt::WindowFlags f)
 
     m_mainWindow->setupUi(this);
 
-    connect(m_mainWindow->requestDeviceAccess, &QPushButton::clicked, this, &PortalTest::requestDeviceAccess);
     connect(m_mainWindow->screenShareButton, &QPushButton::clicked, this, &PortalTest::requestScreenSharing);
-
     connect( m_mainWindow->pushButtonStop, &QPushButton::clicked, this, &PortalTest::slot_Stop );
 
     gst_init(nullptr, nullptr);
@@ -75,33 +73,6 @@ PortalTest::PortalTest(QWidget *parent, Qt::WindowFlags f)
 PortalTest::~PortalTest()
 {
     delete m_mainWindow;
-}
-
-void PortalTest::requestDeviceAccess()
-{
-    qWarning() << "Request device access";
-    const QString device = m_mainWindow->deviceCombobox->currentIndex() == 0 ? QLatin1String("microphone") :
-                                                                               m_mainWindow->deviceCombobox->currentIndex() == 1 ? QLatin1String("speakers") : QLatin1String("camera");
-
-qDebug() <<  device << "111111111111111111111111111111111111111111111111111111111111111111";
-    QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
-                                                          QLatin1String("/org/freedesktop/portal/desktop"),
-                                                          QLatin1String("org.freedesktop.portal.Device"),
-                                                          QLatin1String("AccessDevice"));
-    message << (uint)QApplication::applicationPid() << QStringList {device} << QVariantMap();
-qDebug() << message << "222222222222222222222222222222222222222222222222222222222222222222";
-    QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher)
-    {
-        QDBusPendingReply<QDBusObjectPath> reply = *watcher;
-        if (reply.isError()) {
-            qWarning() << "Couldn't get reply";
-            qWarning() << "Error: " << reply.error().message();
-        } else {
-            qWarning() << reply.value().path();
-        }
-    });
 }
 
 void PortalTest::requestScreenSharing()
@@ -226,7 +197,7 @@ qDebug() << message;
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
 
-        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        QString gstLaunch = QString("pipewiresrc fd=%1 path=%2 do-timestamp=true ! queue ! videoconvert n-threads=4 ! x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4 ! video/x-h264, profile=baseline ! matroskamux ! filesink location=/home/vk/Videos/vokoscreenNG.mkv" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
 
 qDebug();
         qDebug() << gstLaunch;
@@ -249,7 +220,7 @@ void PortalTest::slot_Stop()
 
 void PortalTest::make_time_true()
 {
-    QString gstLaunch = QString( "filesrc location=vokoscreenNG.mkv ! matroskademux name=d d.video_0 ! matroskamux ! filesink location=voko-1.mkv" );
+    QString gstLaunch = QString( "filesrc location=/home/vk/Videos/vokoscreenNG.mkv ! matroskademux name=d d.video_0 ! matroskamux ! filesink location=/home/vk/Videos/voko-1.mkv" );
     element = gst_parse_launch(gstLaunch.toUtf8(), nullptr);
     gst_element_set_state( element, GST_STATE_PLAYING);
 }
