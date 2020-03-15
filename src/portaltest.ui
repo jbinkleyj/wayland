@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>768</width>
+    <width>299</width>
     <height>178</height>
    </rect>
   </property>
@@ -15,13 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_13">
-      <property name="text">
-       <string>Screen sharing:</string>
-      </property>
-     </widget>
-    </item>
+    <property name="formAlignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
     <item row="0" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
@@ -41,7 +37,7 @@
       <item>
        <widget class="QPushButton" name="screenShareButton">
         <property name="text">
-         <string>Request</string>
+         <string>Start</string>
         </property>
        </widget>
       </item>

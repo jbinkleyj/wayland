@@ -120,7 +120,7 @@ void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &resu
             << QVariantMap { { QLatin1String("multiple"), false},
                              { QLatin1String("types"), (uint)m_mainWindow->screenShareCombobox->currentIndex() + 1},
                              { QLatin1String("handle_token"), getRequestToken() } };
-
+qDebug() << "void PortalTest::gotCreateSessionResponse" << message;
     QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
     connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher) {
