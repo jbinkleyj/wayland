@@ -200,14 +200,30 @@ qDebug() << message;
         }
 
         QStringList gstLaunch;
+        //gstLaunch << "videotestsrc";  // Länge vom Video OK. Aber Länge wird nur im Video vokoscreenNG-good angezeigt.
+        gstLaunch << "videotestsrc pattern=snow";
+        gstLaunch << "   ! videoconvert";
+        gstLaunch << "   ! videorate";
+        gstLaunch << "   ! video/x-raw,framerate=25/1,height=1920,width=1080";
+        gstLaunch << "   ! queue";
+        gstLaunch << "   ! mix. ";
         gstLaunch << QString( "pipewiresrc fd=%1 path=%2 do-timestamp=true" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-        gstLaunch << "queue";
-        gstLaunch << "videoconvert n-threads=4";
-        gstLaunch << "x264enc key-int-max=1 qp-min=17 qp-max=17 speed-preset=medium threads=4";
-        gstLaunch << "video/x-h264, profile=baseline";
-        gstLaunch << "matroskamux";
-        gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
-        QString launch = gstLaunch.join( " ! " );
+        gstLaunch << "   ! videoconvert";
+        gstLaunch << "   ! videorate";
+        gstLaunch << "   ! video/x-raw,framerate=20/1";
+        gstLaunch << "   ! queue";
+        gstLaunch << "   ! mix. ";
+        gstLaunch << "videomixer name=mix";
+//        gstLaunch << "   ! videoconvert";
+        gstLaunch << "   ! queue";
+        gstLaunch << "   ! x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4";
+        gstLaunch << "   ! video/x-h264, profile=baseline";
+        gstLaunch << "   ! mux. ";
+        gstLaunch << "matroskamux name=mux";
+        gstLaunch << "   ! filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv sync=false";
+        //QString launch = gstLaunch.join( " ! " );
+        QString launch = gstLaunch.join( "" );
+        
 qDebug();
 qDebug() << launch;
 qDebug();
