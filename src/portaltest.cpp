@@ -176,6 +176,11 @@ void PortalTest::gotSelectSourcesResponse(uint response, const QVariantMap &resu
     });
 }
 
+#include <QFile>
+#include <QFileDevice>
+#include <QFileInfo>
+#include <QDateTime>
+
 void PortalTest::gotStartResponse(uint response, const QVariantMap &results)
 {
     if (response != 0) {
@@ -198,7 +203,7 @@ qDebug() << message;
         if (reply.isError()) {
             qWarning() << "Failed to get fd for node_id " << stream.node_id;
         }
-
+/*
         QStringList gstLaunch;
         //gstLaunch << "videotestsrc";  // Länge vom Video OK. Aber Länge wird nur im Video vokoscreenNG-good angezeigt.
         gstLaunch << "videotestsrc pattern=snow";
@@ -222,6 +227,19 @@ qDebug() << message;
         gstLaunch << "matroskamux name=mux";
         gstLaunch << "   ! filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv sync=false";
         //QString launch = gstLaunch.join( " ! " );
+        QString launch = gstLaunch.join( "" );
+*/
+
+// gst-launch-1.0 videotestsrc pattern=ball ! video/x-raw, framerate=50 ! xvimagesink
+        QStringList gstLaunch;
+        gstLaunch << QString( "pipewiresrc fd=%1 path=%2 do-timestamp=true" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
+        gstLaunch << "   ! videoconvert";
+        gstLaunch << "   ! videorate";
+        gstLaunch << "   ! video/x-raw, framerate=20/1";
+        gstLaunch << "   ! x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4";
+        gstLaunch << "   ! video/x-h264, profile=baseline";
+        gstLaunch << "   ! matroskamux name=mux";
+        gstLaunch << "   ! filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv sync=true";
         QString launch = gstLaunch.join( "" );
         
 qDebug();
