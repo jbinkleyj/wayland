@@ -26,8 +26,6 @@
 #include <QLoggingCategory>
 #include <QMainWindow>
 
-#include <gst/gst.h>
-
 namespace Ui
 {
 class PortalTest;
@@ -35,7 +33,7 @@ class PortalTest;
 
 Q_DECLARE_LOGGING_CATEGORY(PortalTestKde)
 
-class PortalTest : public QMainWindow
+class PortalTest : public QObject //QMainWindow
 {
     Q_OBJECT
 public:
@@ -45,29 +43,40 @@ public:
     } Stream;
     typedef QList<Stream> Streams;
 
-    PortalTest(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
+//    PortalTest(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
+    PortalTest();
     ~PortalTest();
+
 
 public Q_SLOTS:
     void gotCreateSessionResponse(uint response, const QVariantMap &results);
     void gotSelectSourcesResponse(uint response, const QVariantMap &results);
     void gotStartResponse(uint response, const QVariantMap &results);
     void requestScreenSharing();
-    void slot_Stop();
-
+//    void slot_Stop();
 
 private:
-    GstElement *element = nullptr;
-
     QString getSessionToken();
     QString getRequestToken();
-    void make_time_true();
+//    void make_time_true();
 
     QDBusObjectPath m_inhibitionRequest;
     QString m_session;
     Ui::PortalTest * m_mainWindow;
     uint m_sessionTokenCounter;
     uint m_requestTokenCounter;
+
+    QString vk_fd;
+    QString vk_path;
+    int vk_startCounter = 0;
+
+protected:
+
+
+signals:
+    void signal_fd_path( QString, QString );
+
+
 
 };
 

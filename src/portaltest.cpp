@@ -19,19 +19,11 @@
  */
 
 #include "portaltest.h"
-#include "ui_portaltest.h"
 
 #include <QDBusArgument>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusUnixFileDescriptor>
-#include <QWindow>
-#include <QStringList>
-#include <QStandardPaths>
-
-#include <gst/gst.h>
-
-Q_LOGGING_CATEGORY(PortalTestKde, "portal-test-kde")
 
 Q_DECLARE_METATYPE(PortalTest::Stream);
 Q_DECLARE_METATYPE(PortalTest::Streams);
@@ -56,25 +48,14 @@ const QDBusArgument &operator >> (const QDBusArgument &arg, PortalTest::Stream &
     return arg;
 }
 
-PortalTest::PortalTest(QWidget *parent, Qt::WindowFlags f)
-    : QMainWindow(parent, f)
-    , m_mainWindow(new Ui::PortalTest)
-    , m_sessionTokenCounter(0)
+PortalTest::PortalTest()
+    : m_sessionTokenCounter(0)
     , m_requestTokenCounter(0)
 {
-    QLoggingCategory::setFilterRules(QStringLiteral("portal-test-kde.debug = true"));
-
-    m_mainWindow->setupUi(this);
-
-    connect(m_mainWindow->screenShareButton, &QPushButton::clicked, this, &PortalTest::requestScreenSharing);
-    connect( m_mainWindow->pushButtonStop, &QPushButton::clicked, this, &PortalTest::slot_Stop );
-
-    gst_init(nullptr, nullptr);
 }
 
 PortalTest::~PortalTest()
 {
-    delete m_mainWindow;
 }
 
 void PortalTest::requestScreenSharing()
@@ -90,23 +71,26 @@ void PortalTest::requestScreenSharing()
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
     connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher) {
         QDBusPendingReply<QDBusObjectPath> reply = *watcher;
-        if (reply.isError()) {
+        if (reply.isError())
+        {
             qWarning() << "Couldn't get reply";
             qWarning() << "Error: " << reply.error().message();
-        } else {
+        } else
+        {
             QDBusConnection::sessionBus().connect(QString(),
-                                                reply.value().path(),
-                                                QLatin1String("org.freedesktop.portal.Request"),
-                                                QLatin1String("Response"),
-                                                this,
-                                                SLOT(gotCreateSessionResponse(uint,QVariantMap)));
+                                                  reply.value().path(),
+                                                  QLatin1String("org.freedesktop.portal.Request"),
+                                                  QLatin1String("Response"),
+                                                  this,
+                                                  SLOT(gotCreateSessionResponse(uint,QVariantMap)));
         }
     });
 }
 
 void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &results)
 {
-    if (response != 0) {
+    if (response != 0)
+    {
         qWarning() << "Failed to create session: " << response;
         return;
     }
@@ -120,12 +104,13 @@ void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &resu
 
     message << QVariant::fromValue(QDBusObjectPath(m_session))
             << QVariantMap { { QLatin1String("multiple"), false},
-                             { QLatin1String("types"), (uint)m_mainWindow->screenShareCombobox->currentIndex() + 1},
+                             { QLatin1String("types"), (uint)1 }, //(uint)m_mainWindow->screenShareCombobox->currentIndex() + 1}, // 1 = Monitor
                              { QLatin1String("handle_token"), getRequestToken() } };
-qDebug() << "void PortalTest::gotCreateSessionResponse" << message;
+
     QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this] (QDBusPendingCallWatcher *watcher)
+    {
         QDBusPendingReply<QDBusObjectPath> reply = *watcher;
         if (reply.isError()) {
             qWarning() << "Couldn't get reply";
@@ -141,9 +126,10 @@ qDebug() << "void PortalTest::gotCreateSessionResponse" << message;
     });
 }
 
-void PortalTest::gotSelectSourcesResponse(uint response, const QVariantMap &results)
+void PortalTest::gotSelectSourcesResponse( uint response, const QVariantMap &results )
 {
-    if (response != 0) {
+    if ( response != 0 )
+    {
         qWarning() << "Failed to select sources: " << response;
         return;
     }
@@ -177,74 +163,37 @@ void PortalTest::gotSelectSourcesResponse(uint response, const QVariantMap &resu
 }
 
 
-void PortalTest::gotStartResponse(uint response, const QVariantMap &results)
+void PortalTest::gotStartResponse( uint response, const QVariantMap &results )
 {
-    if (response != 0) {
+    if ( response != 0 )
+    {
         qWarning() << "Failed to start: " << response;
     }
 
     Streams streams = qdbus_cast<Streams>(results.value(QLatin1String("streams")));
-    Q_FOREACH (Stream stream, streams)
+    Stream stream = streams.at( vk_startCounter );
+    vk_startCounter++;
+
+    QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
+                                                          QLatin1String("/org/freedesktop/portal/desktop"),
+                                                          QLatin1String("org.freedesktop.portal.ScreenCast"),
+                                                          QLatin1String("OpenPipeWireRemote"));
+
+    message << QVariant::fromValue(QDBusObjectPath(m_session)) << QVariantMap();
+
+    QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall( message );
+    pendingCall.waitForFinished();
+    QDBusPendingReply<QDBusUnixFileDescriptor> reply = pendingCall.reply();
+    if (reply.isError())
     {
-        QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
-                                                              QLatin1String("/org/freedesktop/portal/desktop"),
-                                                              QLatin1String("org.freedesktop.portal.ScreenCast"),
-                                                              QLatin1String("OpenPipeWireRemote"));
-
-        message << QVariant::fromValue(QDBusObjectPath(m_session)) << QVariantMap();
-qDebug() << message;
-        QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
-        pendingCall.waitForFinished();
-        QDBusPendingReply<QDBusUnixFileDescriptor> reply = pendingCall.reply();
-        if (reply.isError())
-        {
-            qWarning() << "Failed to get fd for node_id " << stream.node_id;
-        }
-
-        QStringList gstLaunch;
-        gstLaunch << QString( "pipewiresrc fd=%1 path=%2 do-timestamp=true" ).arg(reply.value().fileDescriptor()).arg(stream.node_id);
-        gstLaunch << "videoconvert";
-        gstLaunch << "videorate";
-        gstLaunch << "video/x-raw, framerate=60/1";
-        gstLaunch << "queue max-size-bytes=1073741824 max-size-time=10000000000 max-size-buffers=1000";
-        gstLaunch << "x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4";
-        gstLaunch << "video/x-h264, profile=baseline";
-        gstLaunch << "matroskamux name=mux";
-        gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
-        QString launch = gstLaunch.join( " ! " );
-        
-qDebug();
-qDebug() << launch;
-qDebug();
-        element = gst_parse_launch( launch.toUtf8(), nullptr );
-        gst_element_set_state( element, GST_STATE_PLAYING );
+        qWarning() << "Failed to get fd for node_id " << stream.node_id;
     }
-}
 
-void PortalTest::slot_Stop()
-{
-    GstStateChangeReturn ret ;
-    ret = gst_element_set_state( element, GST_STATE_PAUSED );
-    ret = gst_element_set_state( element, GST_STATE_READY );
-    ret = gst_element_set_state( element, GST_STATE_NULL );
-    gst_object_unref( element );
-    qDebug().noquote() << "Stop record";
-    make_time_true();
-}
+    vk_fd = QString::number( reply.value().fileDescriptor() );
+    vk_path = QString::number( stream.node_id );
 
-void PortalTest::make_time_true()
-{
-    QStringList gstLaunch;
-    gstLaunch << "filesrc location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
-    gstLaunch << "matroskademux name=d d.video_0";
-    gstLaunch << "matroskamux";
-    gstLaunch << "filesink location=" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-good.mkv";
-    QString launch = gstLaunch.join( " ! " );
-qDebug() << launch;
-    element = gst_parse_launch(launch.toUtf8(), nullptr);
-    gst_element_set_state( element, GST_STATE_PLAYING);
+    emit signal_fd_path( vk_fd, vk_path );
 }
-
 
 QString PortalTest::getSessionToken()
 {
