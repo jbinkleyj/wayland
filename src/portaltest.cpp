@@ -84,11 +84,13 @@ void PortalTest::requestScreenSharing()
                                                   this,
                                                   SLOT(gotCreateSessionResponse(uint,QVariantMap)));
         }
+        qDebug() << "reply.value().path():" << reply.value().path();
     });
 }
 
 void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &results)
 {
+qDebug() << "1111111111111111111111111111111111111111111111111111111111";
     if (response != 0)
     {
         qWarning() << "Failed to create session: " << response;
@@ -124,10 +126,12 @@ void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &resu
                                                 SLOT(gotSelectSourcesResponse(uint,QVariantMap)));
         }
     });
+qDebug() << "2222222222222222222222222222222222222222222222222222222222222222222";
 }
 
 void PortalTest::gotSelectSourcesResponse( uint response, const QVariantMap &results )
 {
+qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333333";
     if ( response != 0 )
     {
         qWarning() << "Failed to select sources: " << response;
@@ -160,14 +164,18 @@ void PortalTest::gotSelectSourcesResponse( uint response, const QVariantMap &res
                                                 SLOT(gotStartResponse(uint,QVariantMap)));
         }
     });
+qDebug() << "44444444444444444444444444444444444444444444444444444444444444444444444";
 }
 
 
 void PortalTest::gotStartResponse( uint response, const QVariantMap &results )
 {
+qDebug() << "55555555555555555555555555555555555555555555555555555555555555";
     if ( response != 0 )
     {
+        // KDE-Dialog wird per Button <Abbruch> abgeprochen
         qWarning() << "Failed to start: " << response;
+        return;
     }
 
     Streams streams = qdbus_cast<Streams>(results.value(QLatin1String("streams")));
