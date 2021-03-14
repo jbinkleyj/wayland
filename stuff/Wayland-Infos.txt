@@ -38,6 +38,7 @@ Webcam:
 2. systemctl --user start pipewire          --> pipewire starten
 3. systemctl --user status pipewire.service --> Status von pipewire anzeigen
 4. gst-launch-1.0 pipewiresrc path=5 ! videoconvert ! ximagesink --> webcam starten
+Hint: path=object.id --> opensuse 15.2 gst-device-monitor-1.0 --> webcam
 
 Umgebungsvariablen:
 echo $XDG_SESSION_TYPE --> output: wayland
