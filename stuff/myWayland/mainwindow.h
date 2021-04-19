@@ -19,12 +19,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    wl_display *vk_display = NULL;
+    
 
 
 private slots:
     void slot_pushButtonConnectToDisplay();
-    void slot_platformNativeInterface();
+//    void slot_platformNativeInterface();
 
 
 };
