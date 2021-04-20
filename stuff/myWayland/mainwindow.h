@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 
-#include "/usr/include/wayland/wayland-client.h"
-
 namespace Ui {
 class MainWindow;
 }
@@ -19,12 +17,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    bool is_Wayland_Display_Available();
     
 
 
 private slots:
     void slot_pushButtonConnectToDisplay();
-//    void slot_platformNativeInterface();
 
 
 };
