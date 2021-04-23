@@ -18,7 +18,7 @@ public:
 private:
     Ui::MainWindow *ui;
     bool is_Wayland_Display_Available();
-    
+
 
 
 private slots:
