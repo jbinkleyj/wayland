@@ -10,6 +10,8 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
+    ui->screenShareCombobox->hide();
+
     connect( ui->screenShareButton, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
     connect( ui->pushButtonStop,    SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
     connect( portalTest, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT(slot_start_gst( QString, QString ) ) );

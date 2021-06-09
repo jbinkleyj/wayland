@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = src
+TARGET = vokoscreenNG
 INCLUDEPATH += .
 
 QT += core gui widgets multimedia network dbus
