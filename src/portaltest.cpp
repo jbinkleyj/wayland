@@ -90,7 +90,7 @@ void PortalTest::requestScreenSharing()
 
 void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &results)
 {
-qDebug() << "1111111111111111111111111111111111111111111111111111111111";
+qDebug() << "1111111111111111111111111111111111111111111111111111111111 response:" << response << "results:" << results;
     if (response != 0)
     {
         qWarning() << "Failed to create session: " << response;
@@ -106,8 +106,9 @@ qDebug() << "1111111111111111111111111111111111111111111111111111111111";
 
     message << QVariant::fromValue(QDBusObjectPath(m_session))
             << QVariantMap { { QLatin1String("multiple"), false},
-                             { QLatin1String("types"), (uint)3 }, //(uint)m_mainWindow->screenShareCombobox->currentIndex() + 1}, // 1 = Monitor
+                             { QLatin1String("types"), (uint)1 }, //(uint)m_mainWindow->screenShareCombobox->currentIndex() + 1}, // 1 = Monitor
                              { QLatin1String("handle_token"), getRequestToken() } };
+qDebug() << "1111111111111111111111111111111111111111111111111111111111 message:"<< message;
 
     QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
@@ -131,7 +132,7 @@ qDebug() << "2222222222222222222222222222222222222222222222222222222222222222222
 
 void PortalTest::gotSelectSourcesResponse( uint response, const QVariantMap &results )
 {
-qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333333";
+qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333333 response:" << response << "results:" << results;
     if ( response != 0 )
     {
         qWarning() << "Failed to select sources: " << response;
@@ -170,7 +171,7 @@ qDebug() << "4444444444444444444444444444444444444444444444444444444444444444444
 
 void PortalTest::gotStartResponse( uint response, const QVariantMap &results )
 {
-qDebug() << "55555555555555555555555555555555555555555555555555555555555555";
+qDebug() << "55555555555555555555555555555555555555555555555555555555555555 response:" << response << "results:" << results;
     if ( response != 0 )
     {
         // KDE-Dialog wird per Button <Abbruch> abgeprochen
