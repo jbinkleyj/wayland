@@ -41,7 +41,7 @@ void MainWindow::slot_start_gst( QString vk_fd, QString vk_path )
     gstLaunch << "x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4";
     gstLaunch << "video/x-h264, profile=baseline";
     gstLaunch << "matroskamux name=mux";
-    gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
+    gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG.mkv";
     QString launch = gstLaunch.join( " ! " );
 
     qDebug();
@@ -54,24 +54,15 @@ void MainWindow::slot_start_gst( QString vk_fd, QString vk_path )
 
 void MainWindow::slot_stop()
 {
-    GstStateChangeReturn ret ;
-    ret = gst_element_set_state( element, GST_STATE_PAUSED );
-    ret = gst_element_set_state( element, GST_STATE_READY );
-    ret = gst_element_set_state( element, GST_STATE_NULL );
-    gst_object_unref( element );
-qDebug().noquote() << "Stop record";
-    make_time_true();
-}
 
-void MainWindow::make_time_true()
-{
-    QStringList gstLaunch;
-    gstLaunch << "filesrc location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-bad.mkv";
-    gstLaunch << "matroskademux name=d d.video_0";
-    gstLaunch << "matroskamux";
-    gstLaunch << "filesink location=" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG-good.mkv";
-    QString launch = gstLaunch.join( " ! " );
-qDebug() << launch;
-    element = gst_parse_launch(launch.toUtf8(), nullptr);
-    gst_element_set_state( element, GST_STATE_PLAYING);
+    // send EOS to pipeline
+    gst_element_send_event( element, gst_event_new_eos() );
+
+    // wait for the EOS to traverse the pipeline and is reported to the bus
+    GstBus *bus = gst_element_get_bus( element );
+    gst_bus_timed_pop_filtered( bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_EOS );
+
+    gst_element_set_state( element, GST_STATE_NULL );
+
+    qDebug().noquote() << "Stop record";
 }

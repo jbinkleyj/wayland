@@ -30,7 +30,8 @@ public Q_SLOTS:
 
 private:
     GstElement *element = nullptr;
-    void make_time_true();
+
+
 };
 
 #endif 

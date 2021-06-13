@@ -105,9 +105,10 @@ qDebug() << "1111111111111111111111111111111111111111111111111111111111 response
     m_session = results.value(QLatin1String("session_handle")).toString();
 
     message << QVariant::fromValue(QDBusObjectPath(m_session))
-            << QVariantMap { { QLatin1String("multiple"), false},
+            << QVariantMap { { QLatin1String("multiple"), true},
                              { QLatin1String("types"), (uint)1 }, //(uint)m_mainWindow->screenShareCombobox->currentIndex() + 1}, // 1 = Monitor
                              { QLatin1String("handle_token"), getRequestToken() } };
+
 qDebug() << "1111111111111111111111111111111111111111111111111111111111 message:"<< message;
 
     QDBusPendingCall pendingCall = QDBusConnection::sessionBus().asyncCall(message);
