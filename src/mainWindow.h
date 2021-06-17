@@ -29,7 +29,8 @@ public Q_SLOTS:
 
 
 private:
-    GstElement *element = nullptr;
+    GstElement *vk_gstElement = nullptr;
+    QString Vk_get_Videocodec_Encoder();
 
 
 };

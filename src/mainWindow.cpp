@@ -1,8 +1,11 @@
 #include "mainWindow.h"
+#include "global.h"
 
 #include <QStringList>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QDateTime>
+#include <QThread>
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags f )
     : QMainWindow(parent, f)
@@ -10,11 +13,9 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    ui->screenShareCombobox->hide();
-
-    connect( ui->screenShareButton, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
-    connect( ui->pushButtonStop,    SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
-    connect( portalTest, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT(slot_start_gst( QString, QString ) ) );
+    connect( ui->pushButtonStart, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
+    connect( ui->pushButtonStop,  SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
+    connect( portalTest, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
 
     gst_init( nullptr, nullptr );
 }
@@ -25,44 +26,67 @@ MainWindow::~MainWindow()
 
 void MainWindow::slot_start()
 {
-    qDebug() << "start";
+    qDebug().noquote() << "start";
     portalTest->requestScreenSharing();
+}
+
+
+QString MainWindow::Vk_get_Videocodec_Encoder()
+{
+    QString value;
+    QString encoder = "openh264enc"; //ui->comboBoxVideoCodec->currentData().toString();
+
+    if ( encoder == "openh264enc" )
+    {
+        QStringList list;
+        list << encoder;
+        list << "qp-min=23"; // + QString::number( sliderOpenh264->value() );
+        list << "qp-max=23"; // + QString::number( sliderOpenh264->value() );
+        list << "usage-type=camera"; // We need camera not screen. With screen and a fast sequence of images the video jerks.
+        list << "complexity=low";
+        list << "multi-thread=" + QString::number( QThread::idealThreadCount() );
+        list << "slice-mode=auto"; // Number of slices equal to number of threads
+        value = list.join( " " );
+        value.append( " ! h264parse" );
+    }
+
+    return value;
 }
 
 
 void MainWindow::slot_start_gst( QString vk_fd, QString vk_path )
 {
-    QStringList gstLaunch;
-    gstLaunch << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
-    gstLaunch << "videoconvert";
-    gstLaunch << "videorate";
-    gstLaunch << "video/x-raw, framerate=30/1";
-    gstLaunch << "queue max-size-bytes=1073741824 max-size-time=10000000000 max-size-buffers=1000";
-    gstLaunch << "x264enc qp-min=17 qp-max=17 speed-preset=superfast threads=4";
-    gstLaunch << "video/x-h264, profile=baseline";
-    gstLaunch << "matroskamux name=mux";
-    gstLaunch << "filesink location="  + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + "vokoscreenNG.mkv";
-    QString launch = gstLaunch.join( " ! " );
+    QStringList pipeline;
+    pipeline << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
+    pipeline << "videoconvert";
+    pipeline << "videorate";
+    pipeline << "video/x-raw, framerate=30/1";
+    pipeline << Vk_get_Videocodec_Encoder();
+    pipeline << "matroskamux name=mux";
 
-    qDebug();
-    qDebug() << launch;
-    qDebug();
+    QString newVideoFilename = global::name + "-" + QDateTime::currentDateTime().toString( "yyyy-MM-dd_hh-mm-ss" ) + ".mkv";// + ui->comboBoxFormat->currentText();
+    pipeline << "filesink location=\"" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + newVideoFilename + "\"";
 
-    element = gst_parse_launch( launch.toUtf8(), nullptr );
-    gst_element_set_state( element, GST_STATE_PLAYING );
+    QString launch = pipeline.join( " ! " );
+
+    qDebug().noquote();
+    qDebug().noquote() << global::nameOutput << launch;
+    qDebug().noquote();
+
+    vk_gstElement = gst_parse_launch( launch.toUtf8(), nullptr );
+    gst_element_set_state( vk_gstElement, GST_STATE_PLAYING );
 }
 
 void MainWindow::slot_stop()
 {
-
     // send EOS to pipeline
-    gst_element_send_event( element, gst_event_new_eos() );
+    gst_element_send_event( vk_gstElement, gst_event_new_eos() );
 
     // wait for the EOS to traverse the pipeline and is reported to the bus
-    GstBus *bus = gst_element_get_bus( element );
+    GstBus *bus = gst_element_get_bus( vk_gstElement );
     gst_bus_timed_pop_filtered( bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_EOS );
 
-    gst_element_set_state( element, GST_STATE_NULL );
+    gst_element_set_state( vk_gstElement, GST_STATE_NULL );
 
-    qDebug().noquote() << "Stop record";
+    qDebug().noquote() << global::nameOutput << "Stop record";
 }
