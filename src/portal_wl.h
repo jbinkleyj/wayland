@@ -43,7 +43,6 @@ public:
     } Stream;
     typedef QList<Stream> Streams;
 
-//    PortalTest(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
     Portal_wl();
     ~Portal_wl();
 
@@ -53,16 +52,13 @@ public Q_SLOTS:
     void gotSelectSourcesResponse(uint response, const QVariantMap &results);
     void gotStartResponse(uint response, const QVariantMap &results);
     void requestScreenSharing();
-//    void slot_Stop();
 
 private:
     QString getSessionToken();
     QString getRequestToken();
-//    void make_time_true();
 
     QDBusObjectPath m_inhibitionRequest;
     QString m_session;
-//    Ui::PortalTest * m_mainWindow;
     uint m_sessionTokenCounter;
     uint m_requestTokenCounter;
 
