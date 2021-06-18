@@ -21,11 +21,11 @@ unix:PKGCONFIG += gstreamer-1.0
 # Input
 HEADERS += mainWindow_wl.h \
            global.h \
-           portaltest.h
+           portal_wl.h
            
 SOURCES += main.cpp \
            mainWindow_wl.cpp \
            global.cpp \
-           portaltest.cpp
+           portal_wl.cpp
            
 FORMS += formMainWindow_wl.ui

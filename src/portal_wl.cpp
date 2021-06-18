@@ -18,7 +18,7 @@
  *       Jan Grulich <jgrulich@redhat.com>
  */
 
-#include "portaltest.h"
+#include "portal_wl.h"
 
 #include <QDBusArgument>
 #include <QDBusConnection>

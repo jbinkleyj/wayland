@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "ui_formMainWindow_wl.h"
-#include "portaltest.h"
+#include "portal_wl.h"
 
 #include <QWindow>
 #include <gst/gst.h>
