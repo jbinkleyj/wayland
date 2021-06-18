@@ -19,13 +19,13 @@ unix:PKGCONFIG += gstreamer-1.0
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += mainWindow.h \
+HEADERS += mainWindow_wl.h \
            global.h \
            portaltest.h
            
 SOURCES += main.cpp \
-           mainWindow.cpp \
+           mainWindow_wl.cpp \
            global.cpp \
            portaltest.cpp
            
-FORMS += portaltest.ui
+FORMS += formMainWindow_wl.ui

@@ -1,4 +1,4 @@
-#include "mainWindow.h"
+#include "mainWindow_wl.h"
 #include "global.h"
 
 #include <QStringList>
@@ -7,9 +7,9 @@
 #include <QDateTime>
 #include <QThread>
 
-MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags f )
+QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
     : QMainWindow(parent, f)
-    , ui(new Ui::PortalTest)
+    , ui(new Ui::formMainWindow_wl)
 {
     ui->setupUi( this );
 
@@ -20,18 +20,18 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags f )
     gst_init( nullptr, nullptr );
 }
 
-MainWindow::~MainWindow()
+QvkMainWindow_wl::~QvkMainWindow_wl()
 {
 }
 
-void MainWindow::slot_start()
+void QvkMainWindow_wl::slot_start()
 {
     qDebug().noquote() << "start";
     portalTest->requestScreenSharing();
 }
 
 
-QString MainWindow::Vk_get_Videocodec_Encoder()
+QString QvkMainWindow_wl::Vk_get_Videocodec_Encoder()
 {
     QString value;
     QString encoder = "openh264enc"; //ui->comboBoxVideoCodec->currentData().toString();
@@ -54,13 +54,13 @@ QString MainWindow::Vk_get_Videocodec_Encoder()
 }
 
 
-void MainWindow::slot_start_gst( QString vk_fd, QString vk_path )
+void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
 {
     QStringList pipeline;
     pipeline << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
     pipeline << "videoconvert";
     pipeline << "videorate";
-    pipeline << "video/x-raw, framerate=30/1";
+    pipeline << "video/x-raw, framerate=60/1";
     pipeline << Vk_get_Videocodec_Encoder();
     pipeline << "matroskamux name=mux";
 
@@ -77,7 +77,7 @@ void MainWindow::slot_start_gst( QString vk_fd, QString vk_path )
     gst_element_set_state( vk_gstElement, GST_STATE_PLAYING );
 }
 
-void MainWindow::slot_stop()
+void QvkMainWindow_wl::slot_stop()
 {
     // send EOS to pipeline
     gst_element_send_event( vk_gstElement, gst_event_new_eos() );

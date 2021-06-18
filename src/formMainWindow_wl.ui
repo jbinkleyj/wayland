@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PortalTest</class>
- <widget class="QMainWindow" name="PortalTest">
+ <class>formMainWindow_wl</class>
+ <widget class="QMainWindow" name="formMainWindow_wl">
   <property name="geometry">
    <rect>
     <x>0</x>

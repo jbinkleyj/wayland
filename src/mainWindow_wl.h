@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_portaltest.h"
+#include "ui_formMainWindow_wl.h"
 #include "portaltest.h"
 
 #include <QWindow>
@@ -9,17 +9,17 @@
 
 namespace Ui
 {
-class MainWindow;
+class QvkMainWindow_wl;
 }
 
 
-class MainWindow : public QMainWindow
+class QvkMainWindow_wl : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow( QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags() );
-    ~MainWindow();
-    Ui::PortalTest *ui;
+    QvkMainWindow_wl( QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags() );
+    ~QvkMainWindow_wl();
+    Ui::formMainWindow_wl *ui;
     PortalTest *portalTest = new PortalTest();
 
 public Q_SLOTS:
