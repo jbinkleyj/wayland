@@ -29,3 +29,5 @@ SOURCES += main.cpp \
            portal_wl.cpp
            
 FORMS += formMainWindow_wl.ui
+
+RESOURCES += screencast.qrc
