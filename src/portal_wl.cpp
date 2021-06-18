@@ -25,10 +25,10 @@
 #include <QDBusConnectionInterface>
 #include <QDBusUnixFileDescriptor>
 
-Q_DECLARE_METATYPE(PortalTest::Stream);
-Q_DECLARE_METATYPE(PortalTest::Streams);
+Q_DECLARE_METATYPE(Portal_wl::Stream);
+Q_DECLARE_METATYPE(Portal_wl::Streams);
 
-const QDBusArgument &operator >> (const QDBusArgument &arg, PortalTest::Stream &stream)
+const QDBusArgument &operator >> (const QDBusArgument &arg, Portal_wl::Stream &stream)
 {
     arg.beginStructure();
     arg >> stream.node_id;
@@ -48,17 +48,17 @@ const QDBusArgument &operator >> (const QDBusArgument &arg, PortalTest::Stream &
     return arg;
 }
 
-PortalTest::PortalTest()
+Portal_wl::Portal_wl()
     : m_sessionTokenCounter(0)
     , m_requestTokenCounter(0)
 {
 }
 
-PortalTest::~PortalTest()
+Portal_wl::~Portal_wl()
 {
 }
 
-void PortalTest::requestScreenSharing()
+void Portal_wl::requestScreenSharing()
 {
     QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.portal.Desktop"),
                                                           QLatin1String("/org/freedesktop/portal/desktop"),
@@ -88,7 +88,7 @@ void PortalTest::requestScreenSharing()
     });
 }
 
-void PortalTest::gotCreateSessionResponse(uint response, const QVariantMap &results)
+void Portal_wl::gotCreateSessionResponse(uint response, const QVariantMap &results)
 {
 qDebug() << "1111111111111111111111111111111111111111111111111111111111 response:" << response << "results:" << results;
     if (response != 0)
@@ -131,7 +131,7 @@ qDebug() << "1111111111111111111111111111111111111111111111111111111111 message:
 qDebug() << "2222222222222222222222222222222222222222222222222222222222222222222";
 }
 
-void PortalTest::gotSelectSourcesResponse( uint response, const QVariantMap &results )
+void Portal_wl::gotSelectSourcesResponse( uint response, const QVariantMap &results )
 {
 qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333333 response:" << response << "results:" << results;
     if ( response != 0 )
@@ -170,7 +170,7 @@ qDebug() << "4444444444444444444444444444444444444444444444444444444444444444444
 }
 
 
-void PortalTest::gotStartResponse( uint response, const QVariantMap &results )
+void Portal_wl::gotStartResponse( uint response, const QVariantMap &results )
 {
 qDebug() << "55555555555555555555555555555555555555555555555555555555555555 response:" << response << "results:" << results;
     if ( response != 0 )
@@ -205,13 +205,13 @@ qDebug() << "55555555555555555555555555555555555555555555555555555555555555 resp
     emit signal_fd_path( vk_fd, vk_path );
 }
 
-QString PortalTest::getSessionToken()
+QString Portal_wl::getSessionToken()
 {
     m_sessionTokenCounter += 1;
     return QString("u%1").arg(m_sessionTokenCounter);
 }
 
-QString PortalTest::getRequestToken()
+QString Portal_wl::getRequestToken()
 {
     m_requestTokenCounter += 1;
     return QString("u%1").arg(m_requestTokenCounter);

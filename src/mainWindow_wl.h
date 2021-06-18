@@ -20,7 +20,7 @@ public:
     QvkMainWindow_wl( QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags() );
     ~QvkMainWindow_wl();
     Ui::formMainWindow_wl *ui;
-    PortalTest *portalTest = new PortalTest();
+    Portal_wl *portal_wl = new Portal_wl();
 
 public Q_SLOTS:
     void slot_start();

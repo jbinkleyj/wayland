@@ -18,22 +18,22 @@
  *       Jan Grulich <jgrulich@redhat.com>
  */
 
-#ifndef PORTAL_TEST_KDE_H
-#define PORTAL_TEST_KDE_H
+#ifndef PORTAL_WL_H
+#define PORTAL_WL_H
 
 #include <QDBusObjectPath>
 #include <QFlags>
 #include <QLoggingCategory>
 #include <QMainWindow>
-
+/*
 namespace Ui
 {
 class PortalTest;
 }
-
+*/
 Q_DECLARE_LOGGING_CATEGORY(PortalTestKde)
 
-class PortalTest : public QObject //QMainWindow
+class Portal_wl : public QObject //QMainWindow
 {
     Q_OBJECT
 public:
@@ -44,8 +44,8 @@ public:
     typedef QList<Stream> Streams;
 
 //    PortalTest(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
-    PortalTest();
-    ~PortalTest();
+    Portal_wl();
+    ~Portal_wl();
 
 
 public Q_SLOTS:
@@ -62,7 +62,7 @@ private:
 
     QDBusObjectPath m_inhibitionRequest;
     QString m_session;
-    Ui::PortalTest * m_mainWindow;
+//    Ui::PortalTest * m_mainWindow;
     uint m_sessionTokenCounter;
     uint m_requestTokenCounter;
 
@@ -80,4 +80,4 @@ signals:
 
 };
 
-#endif // PORTAL_TEST_KDE_H
+#endif // PORTAL_WL_H

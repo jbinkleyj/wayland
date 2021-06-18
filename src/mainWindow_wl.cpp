@@ -15,7 +15,7 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 
     connect( ui->pushButtonStart, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
     connect( ui->pushButtonStop,  SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
-    connect( portalTest, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
+    connect( portal_wl, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
 
     gst_init( nullptr, nullptr );
 }
@@ -27,7 +27,7 @@ QvkMainWindow_wl::~QvkMainWindow_wl()
 void QvkMainWindow_wl::slot_start()
 {
     qDebug().noquote() << "start";
-    portalTest->requestScreenSharing();
+    portal_wl->requestScreenSharing();
 }
 
 
