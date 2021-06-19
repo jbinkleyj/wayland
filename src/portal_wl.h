@@ -53,6 +53,7 @@ public Q_SLOTS:
     void gotStartResponse(uint response, const QVariantMap &results);
     void requestScreenSharing();
 
+
 private:
     QString getSessionToken();
     QString getRequestToken();
@@ -65,6 +66,7 @@ private:
     QString vk_fd;
     QString vk_path;
     int vk_startCounter = 0;
+
 
 protected:
 

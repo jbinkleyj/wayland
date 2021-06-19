@@ -26,6 +26,7 @@ QvkMainWindow_wl::~QvkMainWindow_wl()
 {
 }
 
+
 void QvkMainWindow_wl::setConnects()
 {
     connect( ui->toolButtonFramesReset, SIGNAL( clicked( bool ) ), this, SLOT( slot_framesReset() ) );
@@ -74,7 +75,7 @@ void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
     pipeline << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
     pipeline << "videoconvert";
     pipeline << "videorate";
-    pipeline << "video/x-raw, framerate=" + QString::number( sliderFrames->value() );
+    pipeline << "video/x-raw, framerate=" + QString::number( sliderFrames->value() ) + "/1";
     pipeline << Vk_get_Videocodec_Encoder();
     pipeline << "matroskamux name=mux";
 
