@@ -60,7 +60,7 @@ void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
     pipeline << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
     pipeline << "videoconvert";
     pipeline << "videorate";
-    pipeline << "video/x-raw, framerate=60/1";
+    pipeline << "video/x-raw, framerate=25/1";
     pipeline << Vk_get_Videocodec_Encoder();
     pipeline << "matroskamux name=mux";
 
