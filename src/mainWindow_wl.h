@@ -3,8 +3,10 @@
 
 #include "ui_formMainWindow_wl.h"
 #include "portal_wl.h"
+#include "QvkSpezialSlider.h"
 
 #include <QWindow>
+
 #include <gst/gst.h>
 
 namespace Ui
@@ -22,16 +24,21 @@ public:
     Ui::formMainWindow_wl *ui;
     Portal_wl *portal_wl = new Portal_wl();
 
+
 public Q_SLOTS:
     void slot_start();
     void slot_stop();
     void slot_start_gst( QString vk_fd, QString vk_path );
+    void slot_framesReset();
 
 
 private:
     GstElement *vk_gstElement = nullptr;
     QString Vk_get_Videocodec_Encoder();
+    QvkSpezialSlider *sliderFrames;
 
+    void setSpezialSlider();
+    void setConnects();
 
 };
 

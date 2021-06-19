@@ -31,3 +31,5 @@ SOURCES += main.cpp \
 FORMS += formMainWindow_wl.ui
 
 RESOURCES += screencast.qrc
+
+include(spezialSlider/spezialSlider.pri)

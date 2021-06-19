@@ -13,21 +13,28 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    connect( ui->pushButtonStart, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
-    connect( ui->pushButtonStop,  SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
-    connect( portal_wl, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
+    setWindowTitle( global::name + " " + global::version );
+    QIcon icon( QString::fromUtf8( ":/pictures/logo/logo.png" ) );
+    setWindowIcon( icon );
 
-    gst_init( nullptr, nullptr );
+    setSpezialSlider();
+    setConnects();
 }
+
 
 QvkMainWindow_wl::~QvkMainWindow_wl()
 {
 }
 
-void QvkMainWindow_wl::slot_start()
+void QvkMainWindow_wl::setConnects()
 {
-    qDebug().noquote() << "start";
-    portal_wl->requestScreenSharing();
+    connect( ui->toolButtonFramesReset, SIGNAL( clicked( bool ) ), this, SLOT( slot_framesReset() ) );
+
+    connect( ui->pushButtonStart, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
+
+    connect( ui->pushButtonStop,  SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
+
+    connect( portal_wl, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
 }
 
 
@@ -54,13 +61,20 @@ QString QvkMainWindow_wl::Vk_get_Videocodec_Encoder()
 }
 
 
+void QvkMainWindow_wl::slot_start()
+{
+    qDebug().noquote() << "start";
+    portal_wl->requestScreenSharing();
+}
+
+
 void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
 {
     QStringList pipeline;
     pipeline << QString( "pipewiresrc fd=" ).append( vk_fd ).append( " path=" ).append( vk_path ).append( " do-timestamp=true" );
     pipeline << "videoconvert";
     pipeline << "videorate";
-    pipeline << "video/x-raw, framerate=25/1";
+    pipeline << "video/x-raw, framerate=" + QString::number( sliderFrames->value() );
     pipeline << Vk_get_Videocodec_Encoder();
     pipeline << "matroskamux name=mux";
 
@@ -77,6 +91,7 @@ void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
     gst_element_set_state( vk_gstElement, GST_STATE_PLAYING );
 }
 
+
 void QvkMainWindow_wl::slot_stop()
 {
     // send EOS to pipeline
@@ -89,4 +104,23 @@ void QvkMainWindow_wl::slot_stop()
     gst_element_set_state( vk_gstElement, GST_STATE_NULL );
 
     qDebug().noquote() << global::nameOutput << "Stop record";
+}
+
+
+void QvkMainWindow_wl::setSpezialSlider()
+{
+    sliderFrames = new QvkSpezialSlider( Qt::Horizontal );
+    ui->horizontalLayout_slider_frames->insertWidget( 0, sliderFrames );
+    sliderFrames->setObjectName( "sliderFrames" );
+    sliderFrames->setTracking( true );
+    sliderFrames->setMinimum( 10 );
+    sliderFrames->setMaximum( 144 );
+    sliderFrames->setValue( 25 );
+    sliderFrames->show();
+}
+
+
+void QvkMainWindow_wl::slot_framesReset()
+{
+    sliderFrames->setValue( 25 );
 }
