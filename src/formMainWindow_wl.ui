@@ -107,7 +107,7 @@
                </font>
               </property>
               <property name="text">
-               <string notr="true">Wayland support for</string>
+               <string notr="true">Experimental Wayland support, tested with:</string>
               </property>
              </widget>
             </item>
@@ -121,7 +121,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>openSUSE Tumbelweed KDE</string>
+               <string notr="true">openSUSE Tumbelweed KDE</string>
               </property>
              </widget>
             </item>
@@ -270,14 +270,14 @@
             <item row="3" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>openSUSE Leap 15.3 KDE</string>
+               <string notr="true">openSUSE Leap 15.3 KDE</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>Fedora 34 KDE (Out of the box)</string>
+               <string notr="true">Fedora 34 KDE (Out of the box)</string>
               </property>
              </widget>
             </item>
