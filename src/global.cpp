@@ -56,7 +56,7 @@ namespace global
         if ( log_filename_exists == false )
         {
             QDateTime dateTime = QDateTime::currentDateTime();
-            QString stringDateTime = dateTime.toString( "yyyy_MM_dd_hh_mm_ss" );
+            QString stringDateTime = dateTime.toString( "yyyy-MM-dd_hh-mm-ss" );
             QString path = QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
 
             QString logDirName = path + "/" + "log";
