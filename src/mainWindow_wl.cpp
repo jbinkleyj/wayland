@@ -4,9 +4,16 @@
 
 #include <QStringList>
 #include <QStandardPaths>
-#include <QDebug>
 #include <QDateTime>
 #include <QThread>
+#include <iostream>
+
+/*
+void QvkMainWindow_wl::vk_out( QString value )
+{
+    std::cout << value.toStdString() << std::endl << std::flush;
+}
+*/
 
 QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
     : QMainWindow(parent, f)
@@ -14,7 +21,9 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    QvkLogController *vkLogController = new QvkLogController( ui );
+    QString asd = "QString";
+    int aint = 12345;
+    global::vk_out( global::nameOutput + " " + QString::number( aint ) + " " + "*********" + " " + asd );
 
     setWindowTitle( global::name + " " + global::version );
     QIcon icon( QString::fromUtf8( ":/pictures/logo/logo.png" ) );
@@ -67,7 +76,7 @@ QString QvkMainWindow_wl::Vk_get_Videocodec_Encoder()
 
 void QvkMainWindow_wl::slot_start()
 {
-    qDebug().noquote() << "start";
+    global::vk_out( global::nameOutput + " " + "start" );
     portal_wl->requestScreenSharing();
 }
 
@@ -86,10 +95,7 @@ void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
     pipeline << "filesink location=\"" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + newVideoFilename + "\"";
 
     QString launch = pipeline.join( " ! " );
-
-    qDebug().noquote();
-    qDebug().noquote() << global::nameOutput << launch;
-    qDebug().noquote();
+    global::vk_out( global::nameOutput + " " + launch );
 
     vk_gstElement = gst_parse_launch( launch.toUtf8(), nullptr );
     gst_element_set_state( vk_gstElement, GST_STATE_PLAYING );
@@ -107,7 +113,7 @@ void QvkMainWindow_wl::slot_stop()
 
     gst_element_set_state( vk_gstElement, GST_STATE_NULL );
 
-    qDebug().noquote() << global::nameOutput << "Stop record";
+    global::vk_out( global::nameOutput + " " + "Stop record" );
 }
 
 

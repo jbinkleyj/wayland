@@ -21,10 +21,17 @@
  */
 
 #include <QString>
+#include <QFile>
 
 namespace global
 {
     extern QString name;
     extern QString nameOutput;
     extern QString version;
+
+    extern QFile logFile;
+    extern void vk_out( QString value );
+    extern void vk_create_log_filename();
+    extern void write_to_log( QString value );
+    extern bool log_filename_exists;
 }
