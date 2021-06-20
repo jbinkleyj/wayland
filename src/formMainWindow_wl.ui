@@ -479,6 +479,20 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="icon">
+        <iconset resource="screencast.qrc">
+         <normaloff>:/pictures/log/log-sidebar.png</normaloff>:/pictures/log/log-sidebar.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string notr="true"/>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QTextBrowser" name="textBrowserLog"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
