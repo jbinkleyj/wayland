@@ -82,13 +82,13 @@ void Portal_wl::requestScreenSharing()
                                                   QLatin1String("org.freedesktop.portal.Request"),
                                                   QLatin1String("Response"),
                                                   this,
-                                                  SLOT(gotCreateSessionResponse(uint,QVariantMap)));
+                                                  SLOT( slot_gotCreateSessionResponse(uint,QVariantMap)));
         }
         qDebug() << "reply.value().path():" << reply.value().path();
     });
 }
 
-void Portal_wl::gotCreateSessionResponse(uint response, const QVariantMap &results)
+void Portal_wl::slot_gotCreateSessionResponse(uint response, const QVariantMap &results)
 {
 qDebug() << "1111111111111111111111111111111111111111111111111111111111 response:" << response << "results:" << results;
     if (response != 0)
@@ -125,13 +125,13 @@ qDebug() << "1111111111111111111111111111111111111111111111111111111111 message:
                                                 QLatin1String("org.freedesktop.portal.Request"),
                                                 QLatin1String("Response"),
                                                 this,
-                                                SLOT(gotSelectSourcesResponse(uint,QVariantMap)));
+                                                SLOT( slot_gotSelectSourcesResponse(uint,QVariantMap)));
         }
     });
 qDebug() << "2222222222222222222222222222222222222222222222222222222222222222222";
 }
 
-void Portal_wl::gotSelectSourcesResponse( uint response, const QVariantMap &results )
+void Portal_wl::slot_gotSelectSourcesResponse( uint response, const QVariantMap &results )
 {
 qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333333 response:" << response << "results:" << results;
     if ( response != 0 )
@@ -163,14 +163,14 @@ qDebug() << "3333333333333333333333333333333333333333333333333333333333333333333
                                                 QLatin1String("org.freedesktop.portal.Request"),
                                                 QLatin1String("Response"),
                                                 this,
-                                                SLOT(gotStartResponse(uint,QVariantMap)));
+                                                SLOT( slot_gotStartResponse(uint,QVariantMap)));
         }
     });
 qDebug() << "44444444444444444444444444444444444444444444444444444444444444444444444";
 }
 
 
-void Portal_wl::gotStartResponse( uint response, const QVariantMap &results )
+void Portal_wl::slot_gotStartResponse( uint response, const QVariantMap &results )
 {
 qDebug() << "55555555555555555555555555555555555555555555555555555555555555 response:" << response << "results:" << results;
     if ( response != 0 )

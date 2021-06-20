@@ -1,5 +1,5 @@
 /* vokoscreenNG - A desktop recorder
- * Copyright (C) 2017-2019 Volker Kohaupt
+ * Copyright (C) 2017-2021 Volker Kohaupt
  * 
  * Author:
  *      Volker Kohaupt <vkohaupt@freenet.de>
@@ -70,12 +70,7 @@ namespace global
             log_filename_exists = true;
         }
 
-#ifdef Q_OS_LINUX
         QString eol = "\n";
-#endif
-#ifdef Q_OS_WIN
-        QString eol = "\r\n";
-#endif
         logFile.open( QIODevice::Append | QIODevice::Text | QIODevice::Unbuffered );
         logFile.write( value.toUtf8() );
         logFile.write( eol.toUtf8() );

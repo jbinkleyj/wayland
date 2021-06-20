@@ -45,13 +45,16 @@ public:
 
     Portal_wl();
     ~Portal_wl();
+    void requestScreenSharing();
 
 
 public Q_SLOTS:
-    void gotCreateSessionResponse(uint response, const QVariantMap &results);
-    void gotSelectSourcesResponse(uint response, const QVariantMap &results);
-    void gotStartResponse(uint response, const QVariantMap &results);
-    void requestScreenSharing();
+    void slot_gotCreateSessionResponse(uint response, const QVariantMap &results);
+    void slot_gotSelectSourcesResponse(uint response, const QVariantMap &results);
+    void slot_gotStartResponse(uint response, const QVariantMap &results);
+
+
+private slots:
 
 
 private:
