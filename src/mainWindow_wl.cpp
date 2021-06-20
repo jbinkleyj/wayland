@@ -6,14 +6,6 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <QThread>
-#include <iostream>
-
-/*
-void QvkMainWindow_wl::vk_out( QString value )
-{
-    std::cout << value.toStdString() << std::endl << std::flush;
-}
-*/
 
 QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
     : QMainWindow(parent, f)
@@ -21,9 +13,7 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    QString asd = "QString";
-    int aint = 12345;
-    global::vk_out( global::nameOutput + " " + QString::number( aint ) + " " + "*********" + " " + asd );
+    global::ui = ui;
 
     setWindowTitle( global::name + " " + global::version );
     QIcon icon( QString::fromUtf8( ":/pictures/logo/logo.png" ) );

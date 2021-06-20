@@ -33,8 +33,6 @@ private:
     void setSpezialSlider();
     void setConnects();
 
-//    void vk_out( QString value );
-
 
 public Q_SLOTS:
 
