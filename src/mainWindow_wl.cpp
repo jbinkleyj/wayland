@@ -31,13 +31,18 @@ QvkMainWindow_wl::~QvkMainWindow_wl()
 
 void QvkMainWindow_wl::setConnects()
 {
-    connect( ui->toolButtonFramesReset, SIGNAL( clicked( bool ) ), this, SLOT( slot_framesReset() ) );
 
-    connect( ui->pushButtonStart, SIGNAL( clicked() ), this, SLOT( slot_start() ) );
+    connect( ui->pushButtonStart, SIGNAL( clicked( bool ) ), ui->pushButtonStart, SLOT( setEnabled( bool ) ) );
+    connect( ui->pushButtonStart, SIGNAL( clicked( bool ) ), ui->pushButtonStop, SLOT( setDisabled( bool ) ) );
+    connect( ui->pushButtonStart, SIGNAL( clicked( bool ) ), this, SLOT( slot_start() ) );
 
-    connect( ui->pushButtonStop,  SIGNAL( clicked() ), this, SLOT( slot_stop() ) );
+    connect( ui->pushButtonStop,  SIGNAL( clicked( bool ) ), this, SLOT( slot_stop() ) );
+    connect( ui->pushButtonStop,  SIGNAL( clicked( bool ) ), ui->pushButtonStop, SLOT( setEnabled( bool ) ) );
+    connect( ui->pushButtonStop,  SIGNAL( clicked( bool ) ), ui->pushButtonStart, SLOT( setDisabled( bool ) ) );
 
     connect( portal_wl, SIGNAL( signal_fd_path( QString, QString ) ), this, SLOT( slot_start_gst( QString, QString ) ) );
+
+    connect( ui->toolButtonFramesReset, SIGNAL( clicked( bool ) ), this, SLOT( slot_framesReset() ) );
 }
 
 
