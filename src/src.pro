@@ -33,4 +33,3 @@ FORMS += formMainWindow_wl.ui
 RESOURCES += screencast.qrc
 
 include(spezialSlider/spezialSlider.pri)
-include(log/log.pri))

@@ -1,6 +1,5 @@
 #include "mainWindow_wl.h"
 #include "global.h"
-#include "QvkLogController.h"
 
 #include <QStringList>
 #include <QStandardPaths>
