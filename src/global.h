@@ -23,17 +23,9 @@
 #include <QString>
 #include <QFile>
 
-#include "ui_formMainWindow_wl.h"
-
-
 namespace global
 {
     extern QString name;
     extern QString nameOutput;
     extern QString version;
-
-    extern Ui::formMainWindow_wl *ui;
-    extern QFile logFile;
-    extern bool log_filename_exists;
-    extern void vk_out( QString value );
 }

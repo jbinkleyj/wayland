@@ -12,8 +12,6 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
-    global::ui = ui;
-
     setWindowTitle( global::name + " " + global::version );
     QIcon icon( QString::fromUtf8( ":/pictures/logo/logo.png" ) );
     setWindowIcon( icon );
@@ -70,7 +68,7 @@ QString QvkMainWindow_wl::Vk_get_Videocodec_Encoder()
 
 void QvkMainWindow_wl::slot_start()
 {
-    global::vk_out( global::nameOutput + " " + "start" );
+    qDebug().noquote() << global::nameOutput << "start";
     portal_wl->requestScreenSharing();
 }
 
@@ -89,7 +87,7 @@ void QvkMainWindow_wl::slot_start_gst( QString vk_fd, QString vk_path )
     pipeline << "filesink location=\"" + QStandardPaths::writableLocation( QStandardPaths::MoviesLocation ) + "/" + newVideoFilename + "\"";
 
     QString launch = pipeline.join( " ! " );
-    global::vk_out( global::nameOutput + " " + launch );
+    qDebug() << global::nameOutput << launch;
 
     vk_gstElement = gst_parse_launch( launch.toUtf8(), nullptr );
     gst_element_set_state( vk_gstElement, GST_STATE_PLAYING );
@@ -107,7 +105,7 @@ void QvkMainWindow_wl::slot_stop()
 
     gst_element_set_state( vk_gstElement, GST_STATE_NULL );
 
-    global::vk_out( global::nameOutput + " " + "Stop record" );
+    qDebug() << global::nameOutput << "Stop record";
 }
 
 

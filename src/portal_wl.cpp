@@ -103,6 +103,7 @@ qDebug() << "1111111111111111111111111111111111111111111111111111111111 response
                                                           QLatin1String("SelectSources"));
 
     m_session = results.value(QLatin1String("session_handle")).toString();
+qDebug() << "111111111111111111111111111111111111111111111111111111111 m_session:" << m_session;
 
     message << QVariant::fromValue(QDBusObjectPath(m_session))
             << QVariantMap { { QLatin1String("multiple"), true},

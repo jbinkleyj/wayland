@@ -23,12 +23,6 @@
 #include "global.h"
 
 #include <QString>
-#include <QDateTime>
-#include <QStandardPaths>
-#include <QDir>
-#include <QFile>
-
-#include <iostream>
 
 namespace global
 {
@@ -43,40 +37,4 @@ namespace global
     QString version = "3.1.0 pre alpha";
 #endif
 
-
-    QFile logFile;
-    bool log_filename_exists = false;
-    Ui::formMainWindow_wl *ui;
-    void vk_out( QString value )
-    {
-        // Output terminal
-        std::cout << value.toStdString() << std::endl << std::flush;
-
-        // Output log file
-        if ( log_filename_exists == false )
-        {
-            QDateTime dateTime = QDateTime::currentDateTime();
-            QString stringDateTime = dateTime.toString( "yyyy-MM-dd_hh-mm-ss" );
-            QString path = QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
-
-            QString logDirName = path + "/" + "log";
-            if( !QDir( logDirName ).exists() )
-            {
-                QDir().mkpath( logDirName );
-            }
-
-            logFile.setFileName( path + "/" + "log" + "/" + stringDateTime + ".log" );
-
-            log_filename_exists = true;
-        }
-
-        QString eol = "\n";
-        logFile.open( QIODevice::Append | QIODevice::Text | QIODevice::Unbuffered );
-        logFile.write( value.toUtf8() );
-        logFile.write( eol.toUtf8() );
-        logFile.close();
-
-        // Output GUI
-        ui->textBrowserLog->append( value );
-    }
 }
