@@ -1,5 +1,6 @@
 #include "mainWindow_wl.h"
 #include "global.h"
+#include "QvkLogController.h"
 
 #include <QStringList>
 #include <QStandardPaths>
@@ -12,9 +13,18 @@ QvkMainWindow_wl::QvkMainWindow_wl( QWidget *parent, Qt::WindowFlags f )
 {
     ui->setupUi( this );
 
+    QvkLogController *vklogController = new QvkLogController( ui );
+    Q_UNUSED(vklogController);
+
     setWindowTitle( global::name + " " + global::version );
     QIcon icon( QString::fromUtf8( ":/pictures/logo/logo.png" ) );
     setWindowIcon( icon );
+
+    ui->frame_information->hide();
+    ui->pushButtonPause->hide();
+    ui->pushButtonContinue->hide();
+    ui->pushButtonPlay->hide();
+    ui->pushButtonScreencastOpenfolder->hide();
 
     setSpezialSlider();
     setConnects();
