@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>695</width>
     <height>343</height>
    </rect>
   </property>
@@ -94,7 +94,7 @@
                </font>
               </property>
               <property name="text">
-               <string notr="true">Experimental Wayland support, successful tested with:</string>
+               <string notr="true">Experimental Wayland support, successfully tested with</string>
               </property>
              </widget>
             </item>
